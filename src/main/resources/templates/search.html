@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+</head>
+<body>
+
+<div th:replace="fragments :: page-header"></div>
+
+<div class="container body-content">
+
+    <h1 th:text="${#strings.capitalizeWords(title)}"></h1>
+
+    <form th:action="@{/search/results}">
+        <h2>Search by:</h2>
+
+        <p>
+            <span th:each="column : ${columns}">
+                <input
+                        type="radio"
+                        name="searchType"
+                        th:id="${column.key}"
+                        th:value="${column.key}"
+                        th:checked="${column.key == 'all'}"/>
+                <label th:for="${column.key}" th:text="${column.value}"></label>
+            </span>
+
+        </p>
+
+        <p>
+            <label for="searchTerm">Keyword:</label>
+            <input type="text" name="searchTerm" id="searchTerm" />
+        </p>
+
+        <input type="submit" value="Search" />
+    </form>
+
+    <hr />
+    <div th:if="${jobs != null}">
+    <h3 th:text="${#lists.size(jobs) + ' Result(s)'}">Result(s)</h3>
+    </div>
+
+    <div class="container body-content ">
+        <table th:each="job : ${jobs}">
+            <tr th:each="jobList : ${job}">
+                <td class="jobKey" th:text="${jobList.key}"></td>
+                <td class="jobValue" th:text="${jobList.value}"></td>
+
+<!--                name,employer,location,position type,core competency-->
+            </tr>
+        <br />
+        <br />
+    </table>
+
+
+    <div th:if="${columnJob != null}">
+        <h3 th:text="${#lists.size(columnJob) + ' Result(s)'}"></h3>
+        <table class="container body-content" th:each="column : ${columnJob}">
+            <tr th:each="columnList : ${column}">
+                <td class="jobKey" th:text="${columnList.key}"></td>
+                <td class="jobValue" th:text="${columnList.value}"></td>
+
+
+            </tr>
+            <br />
+            <br />
+        </table>
+    </div>
+    <!-- TODO #2 - Loop over jobs map to display all job fields -->
+    </div>
+</div>
+
+</body>
+</html>
